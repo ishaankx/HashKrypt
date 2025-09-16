@@ -7,8 +7,8 @@ on:
       - main
   pull_request:
     branches:
-      - dev
       - main
+      - dev
 
 jobs:
   build:
@@ -21,21 +21,25 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: "npm"
 
-      # Install & build client
+      # Install & build frontend
       - name: Install frontend deps
         working-directory: ./client
-        run: npm install
+        run: npm ci
+        # use cache here
+        env:
+          NPM_CONFIG_CACHE: ~/.npm
 
       - name: Build frontend
         working-directory: ./client
         run: npm run build
 
-      # Install & build server
+      # Install & build backend
       - name: Install backend deps
         working-directory: ./server
-        run: npm install
+        run: npm ci
+        env:
+          NPM_CONFIG_CACHE: ~/.npm
 
       - name: Build backend
         working-directory: ./server
