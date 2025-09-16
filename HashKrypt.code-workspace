@@ -1,14 +1,12 @@
 {
-  "folders": [
-    { "path": "." }
-  ],
+  "folders": [{ "path": "." }],
   "settings": {
     "editor.formatOnSave": true,
     "files.exclude": {
       "**/node_modules": true,
-      "**/dist": true
+      "**/dist": true,
     },
     "typescript.tsdk": "node_modules/typescript/lib",
-    "eslint.validate": ["typescript", "typescriptreact"]
-  }
+    "eslint.validate": ["typescript", "typescriptreact"],
+  },
 }

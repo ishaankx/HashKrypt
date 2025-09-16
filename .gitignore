@@ -16,6 +16,10 @@ yarn-error.log*
 .env*
 !.env.example
 
+# Ignore env files
+.env
+*.env
+
 # Vercel deployment files
 .vercel
 
