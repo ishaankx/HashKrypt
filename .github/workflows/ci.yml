@@ -101,4 +101,4 @@ jobs:
       RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }} # Project token, not just API key
     steps:
       - uses: actions/checkout@v4
-      - run: railway up ./server --service=${{ env.SVC_ID }}
+      - run: railway up ./server --service=${{ env.SVC_ID }} --project-id=${{ secrets.RAILWAY_PROJECT_ID }}
