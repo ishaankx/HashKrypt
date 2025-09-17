@@ -97,16 +97,9 @@ jobs:
     runs-on: ubuntu-latest
     container: ghcr.io/railwayapp/cli:latest
     env:
-      # We only need the token in the environment now
-      RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+      SVC_ID: ${{secrets.RAILWAY_SERVICE_ID}}
+      RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }} # Project token, not just API key
+      RAILWAY_PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}
     steps:
       - uses: actions/checkout@v4
-
-      - name: Link and Deploy to Railway
-        run: |
-          # Explicitly link the project and service from secrets
-          railway link ${{ secrets.RAILWAY_PROJECT_ID }} ${{ secrets.RAILWAY_SERVICE_ID }}
-
-          # The CLI now knows the context, so we just run 'up'
-          # --detach is recommended for CI so the step doesn't hang
-          railway up ./server --detach
+      - run: railway up --service=${{ env.SVC_ID }}
