@@ -20,6 +20,11 @@ yarn-error.log*
 .env
 *.env
 
+/server/.env
+/client/.env.local
+.env.local
+
+
 # Vercel deployment files
 .vercel
 
