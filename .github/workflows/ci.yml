@@ -92,13 +92,12 @@ jobs:
         run: vercel deploy --prebuilt --prod --yes --cwd=./client --token=${{ secrets.VERCEL_TOKEN }}
 
   # ---------- DEPLOY SERVER TO RAILWAY ----------
-  deploy-railway:
+  ddeploy-railway:
     needs: build-and-test
     runs-on: ubuntu-latest
     container: ghcr.io/railwayapp/cli:latest
     env:
-      RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-      SVC_ID: ${{ secrets.RAILWAY_SERVICE_ID }}
+      RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }} # Project token, not just API key
     steps:
       - uses: actions/checkout@v4
-      - run: railway up ./server --service=$SVC_ID
+      - run: railway up --ci
