@@ -99,6 +99,7 @@ jobs:
     env:
       SVC_ID: ${{secrets.RAILWAY_SERVICE_ID}}
       RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }} # Project token, not just API key
+      RAILWAY_PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}
     steps:
       - uses: actions/checkout@v4
-      - run: railway up ./server --service=${{ env.SVC_ID }} --project-id=${{ secrets.RAILWAY_PROJECT_ID }}
+      - run: railway up ./server --service=${{ env.SVC_ID }}
