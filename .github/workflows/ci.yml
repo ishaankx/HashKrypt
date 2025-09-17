@@ -97,7 +97,8 @@ jobs:
     runs-on: ubuntu-latest
     container: ghcr.io/railwayapp/cli:latest
     env:
+      SVC_ID: ${{secrets.RAILWAY_SERVICE_ID}}
       RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }} # Project token, not just API key
     steps:
       - uses: actions/checkout@v4
-      - run: railway up --ci
+      - run: railway up ./service --service=${{ env.SVC_ID }}
