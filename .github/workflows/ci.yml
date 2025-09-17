@@ -1,5 +1,9 @@
 name: CI-CD Pipeline
 
+env:
+  VERCEL_ORG_ID: ${{secrets.VERCEL_ORG_ID}}
+  VERCEL_PROJECT_ID: ${{secrets.VERCEL_PROJECT_ID}}
+
 on:
   push:
     branches: [dev, main]
@@ -89,16 +93,17 @@ jobs:
           cache-dependency-path: ./server/package-lock.json
 
       # ---------- DEPLOY CLIENT TO VERCEL ----------
+
       - name: Install Vercel CLI
         run: npm install -g vercel
 
+      - name: Pull Vercel Environment Information
+        run: vercel pull --yes --environment=production --token=${{secrets.VERCEL_TOKEN}}
+
+      - name: Build project artifacts
+        run: vercel build --prod --token=${{secrets.VERCEL_TOKEN}}
       - name: Deploy to Vercel
-        run: vercel deploy --prebuilt --prod --yes \
-          --cwd=./client \
-          --project-id=${{ secrets.VERCEL_PROJECT_ID }} \
-          --org-id=${{ secrets.VERCEL_ORG_ID }}
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: vercel deploy --prebuilt --prod --yes --token=${{secrets.VERCEL_TOKEN}}
 
       # ---------- DEPLOY SERVER TO RAILWAY ----------
       - name: Install Railway CLI
