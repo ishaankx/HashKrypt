@@ -58,7 +58,12 @@ jobs:
         run: npm test --if-present
 
       # ---------- OPTIONAL LINT ----------
-      - name: Run linter
+      - name: Run linter (client)
+        working-directory: ./client
+        run: npm run lint --if-present
+
+      - name: Run linter (server)
+        working-directory: ./server
         run: npm run lint --if-present
 
   deploy:
