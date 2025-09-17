@@ -94,10 +94,10 @@ jobs:
 
       - name: Deploy to Vercel
         run: vercel deploy --prebuilt --prod --yes \
-          --token=${{ secrets.VERCEL_TOKEN }} \
           --cwd=./client \
           --project-id=${{ secrets.VERCEL_PROJECT_ID }} \
-          --org-id=${{ secrets.VERCEL_ORG_ID }}
+          --org-id=${{ secrets.VERCEL_ORG_ID }} \
+          -t ${{ secrets.VERCEL_TOKEN }}
 
       # ---------- DEPLOY SERVER TO RAILWAY ----------
       - name: Install Railway CLI
