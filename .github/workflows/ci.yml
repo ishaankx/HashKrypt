@@ -93,7 +93,7 @@ jobs:
         run: npm install -g vercel
 
       - name: Deploy to Vercel
-        run: vercel --prod --token=${{ secrets.VERCEL_TOKEN }} --cwd=./client
+        run: vercel --prod --yes --token=${{ secrets.VERCEL_TOKEN }} --cwd=./client
 
       # ---------- DEPLOY SERVER TO RAILWAY ----------
       - name: Install Railway CLI
