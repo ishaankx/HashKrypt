@@ -1,8 +1,8 @@
 name: CI-CD Pipeline
 
 env:
-  VERCEL_ORG_ID: ${{secrets.VERCEL_ORG_ID}}
-  VERCEL_PROJECT_ID: ${{secrets.VERCEL_PROJECT_ID}}
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
 on:
   push:
@@ -70,7 +70,8 @@ jobs:
         working-directory: ./server
         run: npm run lint --if-present
 
-  deploy:
+  # ---------- DEPLOY CLIENT TO VERCEL ----------
+  deploy-vercel:
     needs: build-and-test
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
@@ -78,38 +79,26 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Node.js (client)
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-          cache: "npm"
-          cache-dependency-path: ./client/package-lock.json
-
-      - name: Setup Node.js (server)
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-          cache: "npm"
-          cache-dependency-path: ./server/package-lock.json
-
-      # ---------- DEPLOY CLIENT TO VERCEL ----------
-
       - name: Install Vercel CLI
         run: npm install -g vercel
 
       - name: Pull Vercel Environment Information
-        run: vercel pull --yes --environment=production --token=${{secrets.VERCEL_TOKEN}}
+        run: vercel pull --yes --environment=production --cwd=./client --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Build project artifacts
-        run: vercel build --prod --token=${{secrets.VERCEL_TOKEN}}
+        run: vercel build --prod --cwd=./client --token=${{ secrets.VERCEL_TOKEN }}
+
       - name: Deploy to Vercel
-        run: vercel deploy --prebuilt --prod --yes --token=${{secrets.VERCEL_TOKEN}}
+        run: vercel deploy --prebuilt --prod --yes --cwd=./client --token=${{ secrets.VERCEL_TOKEN }}
 
-      # ---------- DEPLOY SERVER TO RAILWAY ----------
-      - name: Install Railway CLI
-        run: npm install -g @railway/cli
-
-      - name: Deploy to Railway
-        run: railway up ./server --service ${{ secrets.RAILWAY_SERVICE_ID }} --environment production --ci
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+  # ---------- DEPLOY SERVER TO RAILWAY ----------
+  deploy-railway:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    container: ghcr.io/railwayapp/cli:latest
+    env:
+      RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+      SVC_ID: ${{ secrets.RAILWAY_SERVICE_ID }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: railway up ./server --service=$SVC_ID
