@@ -58,7 +58,7 @@ export default function RootLayout({
             {/* Logo + Brand */}
             <Link href="/" className="flex items-center space-x-3">
               <Image
-                src="/HK-Logo-v2.png" // put this file in client/public
+                src="/HK-Logo-V2.png" // put this file in client/public
                 alt="HashKrypt Logo"
                 width={40}
                 height={40}
