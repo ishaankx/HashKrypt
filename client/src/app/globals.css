@@ -249,3 +249,23 @@ html {
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE & Edge */
 }
+
+/* --- Glitch effect for button text --- */
+@keyframes glitch-flicker {
+  0% {
+    opacity: 1;
+    text-shadow: 0 0 2px #39ff14, 0 0 6px #39ff14;
+  }
+  50% {
+    opacity: 0.85;
+    text-shadow: 0 0 4px #ff00ff, 0 0 12px #39ff14;
+  }
+  100% {
+    opacity: 1;
+    text-shadow: 0 0 2px #39ff14, 0 0 6px #39ff14;
+  }
+}
+
+.glitch-hover span {
+  animation: glitch-flicker 0.15s infinite;
+}

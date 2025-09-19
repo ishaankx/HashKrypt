@@ -64,7 +64,7 @@ export default function Home() {
           transition={{ delay: 1, duration: 0.8 }}
           className="mt-8"
         >
-          <Button variant="rect" size="lg">
+          <Button variant="glitch" size="lg">
             Start Encrypting
           </Button>
         </motion.div>

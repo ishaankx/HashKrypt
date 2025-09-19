@@ -58,7 +58,7 @@ export default function RootLayout({
             {/* Logo + Brand */}
             <Link href="/" className="flex items-center space-x-3">
               <Image
-                src="/HK-Logo-V2.png" // put this file in client/public
+                src="/HK-Logo-V2.svg" // put this file in client/public
                 alt="HashKrypt Logo"
                 width={40}
                 height={40}
@@ -79,7 +79,7 @@ export default function RootLayout({
                     href="#features"
                     className="text-white hover:text-brand-dark"
                   >
-                    Features
+                    How It Works
                   </NavigationMenu.Link>
                 </NavigationMenu.Item>
                 <NavigationMenu.Item>
@@ -87,7 +87,7 @@ export default function RootLayout({
                     href="#features"
                     className="text-white hover:text-brand-dark"
                   >
-                    Pricing
+                    Features
                   </NavigationMenu.Link>
                 </NavigationMenu.Item>
                 <NavigationMenu.Item>
@@ -95,15 +95,7 @@ export default function RootLayout({
                     href="#about"
                     className="text-white hover:text-brand-dark"
                   >
-                    About
-                  </NavigationMenu.Link>
-                </NavigationMenu.Item>
-                <NavigationMenu.Item>
-                  <NavigationMenu.Link
-                    href="#contact"
-                    className="text-white hover:text-brand-dark"
-                  >
-                    Contact
+                    Pricing
                   </NavigationMenu.Link>
                 </NavigationMenu.Item>
               </NavigationMenu.List>
