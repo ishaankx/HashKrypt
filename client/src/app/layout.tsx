@@ -7,7 +7,8 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Poppins, Orbitron } from "next/font/google";
 import SmoothScroll from "@/components/SmoothScroll";
-import NavBar from "@/components/NavBar"; // 👈 new import
+import NavBar from "@/components/NavBar"; // 👈 client navbar with usePathname
+import PageTransition from "@/components/PageTransition";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -45,9 +46,10 @@ export default function RootLayout({
         <div className="parallax-bg" id="parallax-bg" />
 
         <SmoothScroll>
+          {/* Header */}
           <header className="fixed top-0 left-0 w-full bg-black/70 backdrop-blur z-50 text-white shadow-sm">
             <div className="relative flex w-full items-center justify-between px-8 py-4">
-              {/* Logo */}
+              {/* Logo → always returns home */}
               <Link href="/" className="flex items-center space-x-3">
                 <Image
                   src="/HK-Logo-V2.svg"
@@ -59,19 +61,22 @@ export default function RootLayout({
                 <h1 className={`${orbitron.className} text-2xl`}>HashKrypt</h1>
               </Link>
 
-              {/* Nav links centered */}
+              {/* Centered NavBar */}
               <div className="absolute left-1/2 transform -translate-x-1/2">
-                <NavBar /> {/* 👈 now comes from client component */}
+                <NavBar />
               </div>
 
-              {/* Get Started button */}
-              <Button variant="rect" className={`${poppins.className}`}>
+              {/* Get Started Button */}
+              <Button variant="rect" className={`${poppins.className} ml-auto`}>
                 Get Started
               </Button>
             </div>
           </header>
 
+          {/* Main content */}
           <main className="flex-1 pt-24">{children}</main>
+
+          {/* Footer */}
           <Footer />
         </SmoothScroll>
       </body>
