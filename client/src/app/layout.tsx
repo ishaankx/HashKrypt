@@ -1,37 +1,25 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import * as NavigationMenu from "@radix-ui/react-navigation-menu";
 import Image from "next/image";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Share_Tech_Mono } from "next/font/google";
-import { Orbitron } from "next/font/google";
-import { Poppins } from "next/font/google";
+import { Poppins, Orbitron } from "next/font/google";
+import SmoothScroll from "@/components/SmoothScroll";
+import NavBar from "@/components/NavBar"; // 👈 new import
 
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["400", "600"],
   variable: "--font-poppins",
 });
-
 const orbitron = Orbitron({
   subsets: ["latin"],
-  weight: ["400", "700"], // choose weights you want
+  weight: ["400", "700"],
   variable: "--font-orbitron",
 });
-
-const matrixFont = Share_Tech_Mono({
-  weight: "400",
-  subsets: ["latin"],
-  variable: "--font-matrix",
-});
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
@@ -50,69 +38,42 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${matrixFont.variable} ${orbitron.variable} ${poppins.variable}`}
+      className={`${geistSans.variable} ${geistMono.variable} ${orbitron.variable} ${poppins.variable}`}
     >
-      <body className="flex min-h-screen flex-col antialiased bg-gradient-to-b from-black">
-        <header className="w-full bg-gray-250 text-black shadow-sm">
-          <div className="flex w-full items-center justify-between px-8 py-4">
-            {/* Logo + Brand */}
-            <Link href="/" className="flex items-center space-x-3">
-              <Image
-                src="/HK-Logo-V2.svg" // put this file in client/public
-                alt="HashKrypt Logo"
-                width={40}
-                height={40}
-                priority
-              />
-              <h1 className={`${orbitron.className} text-2xl text-white`}>
-                HashKrypt
-              </h1>
-            </Link>
+      <body className="flex min-h-screen flex-col antialiased bg-black text-white">
+        {/* Background Parallax */}
+        <div className="parallax-bg" id="parallax-bg" />
 
-            {/* Navigation */}
-            <NavigationMenu.Root>
-              <NavigationMenu.List
-                className={`flex items-center space-x-8 ${poppins.className}`}
-              >
-                <NavigationMenu.Item>
-                  <NavigationMenu.Link
-                    href="#features"
-                    className="text-white hover:text-brand-dark"
-                  >
-                    How It Works
-                  </NavigationMenu.Link>
-                </NavigationMenu.Item>
-                <NavigationMenu.Item>
-                  <NavigationMenu.Link
-                    href="#features"
-                    className="text-white hover:text-brand-dark"
-                  >
-                    Features
-                  </NavigationMenu.Link>
-                </NavigationMenu.Item>
-                <NavigationMenu.Item>
-                  <NavigationMenu.Link
-                    href="#about"
-                    className="text-white hover:text-brand-dark"
-                  >
-                    Pricing
-                  </NavigationMenu.Link>
-                </NavigationMenu.Item>
-              </NavigationMenu.List>
-            </NavigationMenu.Root>
+        <SmoothScroll>
+          <header className="fixed top-0 left-0 w-full bg-black/70 backdrop-blur z-50 text-white shadow-sm">
+            <div className="relative flex w-full items-center justify-between px-8 py-4">
+              {/* Logo */}
+              <Link href="/" className="flex items-center space-x-3">
+                <Image
+                  src="/HK-Logo-V2.svg"
+                  alt="HashKrypt Logo"
+                  width={40}
+                  height={40}
+                  priority
+                />
+                <h1 className={`${orbitron.className} text-2xl`}>HashKrypt</h1>
+              </Link>
 
-            <Button
-              variant="rect"
-              className={`ml-6 flex items-center space-x-8 ${poppins.className}`}
-            >
-              Get Started
-            </Button>
-          </div>
-        </header>
+              {/* Nav links centered */}
+              <div className="absolute left-1/2 transform -translate-x-1/2">
+                <NavBar /> {/* 👈 now comes from client component */}
+              </div>
 
-        <main className="flex-1">{children}</main>
+              {/* Get Started button */}
+              <Button variant="rect" className={`${poppins.className}`}>
+                Get Started
+              </Button>
+            </div>
+          </header>
 
-        <Footer />
+          <main className="flex-1 pt-24">{children}</main>
+          <Footer />
+        </SmoothScroll>
       </body>
     </html>
   );
