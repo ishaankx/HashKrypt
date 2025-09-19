@@ -58,7 +58,7 @@ export default function RootLayout({
               {/* Logo → always returns home */}
               <Link href="/" className="flex items-center space-x-3">
                 <Image
-                  src="/HK-Logo-V2.svg"
+                  src="/HK-V2.png"
                   alt="HashKrypt Logo"
                   width={40}
                   height={40}
