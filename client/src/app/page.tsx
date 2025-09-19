@@ -125,7 +125,8 @@ export default function Home() {
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 max-w-6xl w-full">
-          <motion.article className="relative bg-gray-900/40 backdrop-blur-lg border border-gray-800 rounded-2xl p-10 text-center shadow-lg group overflow-hidden">
+          {/* Upload */}
+          <motion.article className="relative bg-gray-900/40 backdrop-blur-lg border border-gray-800 rounded-2xl p-10 text-center shadow-md group overflow-hidden hover:shadow-[#39ff14]/40 transition">
             <CloudArrowUpIcon className="w-14 h-14 text-[#39ff14] mx-auto mb-4" />
             <h3 className="text-2xl font-semibold mb-3 text-white">Upload</h3>
             <p className="text-gray-400">
@@ -133,7 +134,9 @@ export default function Home() {
               click.
             </p>
           </motion.article>
-          <motion.article className="relative bg-gray-900/40 backdrop-blur-lg border border-gray-800 rounded-2xl p-10 text-center shadow-lg group overflow-hidden">
+
+          {/* Encrypt */}
+          <motion.article className="relative bg-gray-900/40 backdrop-blur-lg border border-gray-800 rounded-2xl p-10 text-center shadow-md group overflow-hidden hover:shadow-[#39ff14]/40 transition">
             <LockClosedIcon className="w-14 h-14 text-[#39ff14] mx-auto mb-4" />
             <h3 className="text-2xl font-semibold mb-3 text-white">Encrypt</h3>
             <p className="text-gray-400">
@@ -141,7 +144,9 @@ export default function Home() {
               leaves your device.
             </p>
           </motion.article>
-          <motion.article className="relative bg-gray-900/40 backdrop-blur-lg border border-gray-800 rounded-2xl p-10 text-center shadow-lg group overflow-hidden">
+
+          {/* Share & Decrypt */}
+          <motion.article className="relative bg-gray-900/40 backdrop-blur-lg border border-gray-800 rounded-2xl p-10 text-center shadow-md group overflow-hidden hover:shadow-[#39ff14]/40 transition">
             <ShareIcon className="w-14 h-14 text-[#39ff14] mx-auto mb-4" />
             <h3 className="text-2xl font-semibold mb-3 text-white">
               Share & Decrypt
@@ -155,28 +160,90 @@ export default function Home() {
       </motion.section>
 
       {/* Trust Section */}
+      {/* Trust Section */}
       <motion.section
         id="trust"
-        className="min-h-screen flex flex-col md:flex-row items-center justify-center bg-[#0d0d0d] text-white px-8"
+        className="relative min-h-screen flex flex-col md:flex-row items-center justify-center bg-[#0d0d0d] text-white px-12 py-20 overflow-hidden"
         initial={{ opacity: 0, y: 80 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: false, amount: 0.25 }}
         transition={{ duration: 1 }}
       >
-        <div className="flex-1 mb-12 md:mb-0">
-          <h2 className="text-4xl font-bold mb-6">Trust & Credibility</h2>
-          <p className="text-gray-400 max-w-lg">
-            Audited cryptography. Open-source core. Community-driven security.
+        {/* Neon backdrop */}
+        <div className="absolute inset-0 -z-10 bg-gradient-to-t from-black via-[#0f0f0f] to-[#0d0d0d]" />
+        <div className="absolute right-20 top-1/3 w-[35vw] h-[35vw] bg-[#39ff14]/10 rounded-full blur-3xl opacity-60" />
+        <div className="absolute left-10 bottom-20 w-[20vw] h-[20vw] bg-emerald-400/10 rounded-full blur-2xl opacity-40" />
+
+        {/* Left side: Content */}
+        <div className="flex-1 max-w-2xl md:pr-12 mb-12 md:mb-0">
+          <h2 className="text-5xl font-extrabold bg-gradient-to-r from-[#39ff14] via-green-400 to-emerald-500 bg-clip-text text-transparent drop-shadow-lg mb-6">
+            Trust & Credibility
+          </h2>
+          <p className="text-gray-300 text-lg leading-relaxed mb-8">
+            At <span className="text-[#39ff14] font-semibold">HashKrypt</span>,
+            we put <span className="text-[#39ff14]">privacy first</span>. Every
+            file is encrypted locally with{" "}
+            <span className="text-[#39ff14]">AES-256</span>, ensuring no
+            plaintext ever leaves your device. We never store, read, or analyze
+            your data — control stays entirely with{" "}
+            <span className="text-[#39ff14]">you</span>.
+          </p>
+          <p className="text-gray-400 text-base leading-relaxed">
+            Our systems are <span className="text-[#39ff14]">open-source</span>{" "}
+            and continuously <span className="text-[#39ff14]">audited</span> by
+            the security community. With{" "}
+            <span className="text-[#39ff14]">zero-knowledge design</span>,
+            regulatory compliance (GDPR-ready), and{" "}
+            <span className="text-[#39ff14]">
+              enterprise-grade cryptography
+            </span>
+            , HashKrypt offers both individuals and organizations the highest
+            level of trust.
           </p>
         </div>
-        <div className="flex-1 flex space-x-8 justify-center">
-          <div className="flex flex-col items-center">
-            <ShieldCheckIcon className="w-12 h-12 text-green-400" />
-            <span className="mt-2 text-gray-400">Audited</span>
+
+        {/* Right side: Futuristic feature badges */}
+        <div className="flex-1 grid grid-cols-1 gap-8 max-w-md">
+          {/* Card 1 */}
+          <div className="relative bg-gray-900/30 backdrop-blur-md border border-gray-800 rounded-xl p-6 shadow-md hover:shadow-[#39ff14]/40 transition">
+            <div className="flex items-center space-x-4">
+              <ShieldCheckIcon className="w-10 h-10 text-[#39ff14]" />
+              <h3 className="text-xl font-semibold text-white">
+                Privacy First
+              </h3>
+            </div>
+            <p className="mt-3 text-gray-400 text-sm leading-relaxed">
+              Zero-knowledge architecture. Only you and your recipients hold the
+              decryption keys.
+            </p>
           </div>
-          <div className="flex flex-col items-center">
-            <CheckBadgeIcon className="w-12 h-12 text-green-400" />
-            <span className="mt-2 text-gray-400">Community Trusted</span>
+
+          {/* Card 2 */}
+          <div className="relative bg-gray-900/30 backdrop-blur-md border border-gray-800 rounded-xl p-6 shadow-md hover:shadow-[#39ff14]/40 transition">
+            <div className="flex items-center space-x-4">
+              <CheckBadgeIcon className="w-10 h-10 text-[#39ff14]" />
+              <h3 className="text-xl font-semibold text-white">
+                Audited & Open
+              </h3>
+            </div>
+            <p className="mt-3 text-gray-400 text-sm leading-relaxed">
+              Open-source cryptography, verified by independent researchers and
+              global security experts.
+            </p>
+          </div>
+
+          {/* Card 3 */}
+          <div className="relative bg-gray-900/30 backdrop-blur-md border border-gray-800 rounded-xl p-6 shadow-md hover:shadow-[#39ff14]/40 transition">
+            <div className="flex items-center space-x-4">
+              <LockClosedIcon className="w-10 h-10 text-[#39ff14]" />
+              <h3 className="text-xl font-semibold text-white">
+                Enterprise Ready
+              </h3>
+            </div>
+            <p className="mt-3 text-gray-400 text-sm leading-relaxed">
+              Strong AES-256 encryption, GDPR-compliant, and trusted by privacy
+              communities and businesses worldwide.
+            </p>
           </div>
         </div>
       </motion.section>
