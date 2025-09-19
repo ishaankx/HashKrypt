@@ -8,7 +8,13 @@ import Link from "next/link";
 import { Poppins, Orbitron } from "next/font/google";
 import SmoothScroll from "@/components/SmoothScroll";
 import NavBar from "@/components/NavBar"; // 👈 client navbar with usePathname
-import PageTransition from "@/components/PageTransition";
+import { Share_Tech_Mono } from "next/font/google";
+
+const matrix = Share_Tech_Mono({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-matrix", // 👈 matches globals.css
+});
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -39,7 +45,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${orbitron.variable} ${poppins.variable}`}
+      className={`${geistSans.variable} ${geistMono.variable} ${orbitron.variable} ${poppins.variable} ${matrix.variable}`}
     >
       <body className="flex min-h-screen flex-col antialiased bg-black text-white">
         {/* Background Parallax */}
