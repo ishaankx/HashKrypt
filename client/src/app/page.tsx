@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useScroll, useTransform, easeInOut } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import TypingGlitchWords from "@/components/TypingGlitchWords";
@@ -14,53 +14,33 @@ import {
 
 export default function Home() {
   const containerRef = useRef<HTMLElement | null>(null);
+
+  // track scroll progress relative to the whole page
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"],
   });
 
-  // subtle parallax background
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
+  // Hero zoom-out & fade when scrolling into "What is HashKrypt"
+  const scale = useTransform(scrollYProgress, [0, 0.2], [1, 0.85]);
+  const opacity = useTransform(scrollYProgress, [0, 0.2], [1, 0.5]);
 
-  // blinking cursor for terminal
+  // blinking terminal cursor
   const [cursorBlink, setCursorBlink] = useState(true);
   useEffect(() => {
     const t = setInterval(() => setCursorBlink((b) => !b), 500);
     return () => clearInterval(t);
   }, []);
 
-  // framer-motion variants for staggered cards
-  const cardsContainer = {
-    hidden: {},
-    visible: {
-      transition: {
-        staggerChildren: 0.18,
-        delayChildren: 0.12,
-      },
-    },
-  };
-
-  const cardVariant = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.6, ease: easeInOut },
-    },
-  };
-
   return (
     <main ref={containerRef} className="min-h-screen scroll-smooth">
       {/* Hero Section */}
       <motion.section
         className="relative min-h-screen flex flex-col items-center justify-center text-center overflow-hidden"
-        style={{ y }}
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.9 }}
+        style={{ scale, opacity }} // zooms out on scroll
       >
-        {/* Terminal prompt in top-left */}
-        <div className="absolute top-1 left-6 flex items-center font-mono text-lg text-[#39ff14]">
+        {/* Terminal top-left */}
+        <div className="absolute top-1 left-6 flex items-center font-mono text-lg text-[#39ff14] z-10">
           <span className="font-bold">User@HashKrypt:~$</span>
           <span
             className="inline-block ml-2"
@@ -74,9 +54,14 @@ export default function Home() {
           />
         </div>
 
-        {/* Hero text block moved upward */}
-        <div className="relative -mt-25 flex flex-col items-center">
-          <motion.h1 className="text-5xl sm:text-7xl font-extrabold">
+        {/* Hero text block with load-in animation */}
+        <div className="relative flex flex-col items-center -mt-28">
+          <motion.h1
+            className="text-5xl sm:text-7xl font-extrabold"
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
             <TypingGlitchWords
               text="Encrypt. Share. Decrypt. Securely."
               typingSpeed={50}
@@ -86,118 +71,87 @@ export default function Home() {
               pauseBetweenWords={700}
             />
           </motion.h1>
-          <p className="mt-6 max-w-xl text-gray-400">
+
+          <motion.p
+            className="mt-6 max-w-xl text-gray-400"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 0.8 }}
+          >
             Protect your files with AES-256 encryption. Share safely through
             HashKrypt.
-          </p>
-          <div className="mt-8">
+          </motion.p>
+
+          <motion.div
+            className="mt-8"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1, duration: 0.8 }}
+          >
             <Button variant="glitch" size="lg">
               Start Encrypting
             </Button>
-          </div>
+          </motion.div>
         </div>
       </motion.section>
 
       {/* What is HashKrypt Section */}
       <motion.section
         id="what"
-        className="min-h-screen flex flex-col items-start justify-start bg-black text-white px-10 py-14"
+        className="relative min-h-screen flex flex-col items-center justify-center bg-black text-white px-10 py-20 overflow-hidden"
         initial={{ opacity: 0, y: 60 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.25 }}
+        viewport={{ once: false, amount: 0.4 }}
         transition={{ duration: 0.9 }}
       >
-        {/* Title top-left */}
-        <h2 className="text-4xl md:text-5xl font-bold mb-10">
-          What is HashKrypt
+        {/* Glowing backdrop */}
+        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-transparent via-[#0a0a0a] to-black opacity-90" />
+        <div className="absolute top-32 left-1/2 -translate-x-1/2 w-[30vw] h-[30vw] bg-[#39ff14]/20 rounded-full blur-3xl opacity-55" />
+
+        <h2 className="text-5xl md:text-6xl font-extrabold text-center bg-gradient-to-r from-[#39ff14] via-green-400 to-emerald-500 bg-clip-text text-transparent drop-shadow-lg">
+          What is HashKrypt?
         </h2>
+        <div className="w-32 h-1 bg-gradient-to-r from-[#39ff14] to-transparent mt-4 mb-12 rounded-full" />
 
-        {/* Cards wrapper - centered group */}
-        <div className="w-full mt-25">
-          <motion.div
-            className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-16 md:gap-20 items-start"
-            variants={cardsContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.3 }}
-          >
-            {/* Upload */}
-            <motion.article
-              variants={cardVariant}
-              className="relative group bg-gray-900 rounded-2xl p-10 flex flex-col items-center text-center shadow-lg min-h-[300px] transform-gpu"
-              whileHover={{ translateY: -6, scale: 1.02 }}
-              transition={{ type: "spring", stiffness: 200, damping: 18 }}
-              aria-hidden={false}
-            >
-              <div className="mb-4">
-                <CloudArrowUpIcon className="w-12 h-12 text-[#39ff14] mb-2" />
-              </div>
-              <h3 className="text-xl font-semibold mb-3">Upload</h3>
-              <p className="text-gray-400">
-                Select any file type — documents, images, or videos — and
-                prepare it for secure transfer.
-              </p>
+        <p className="max-w-4xl text-gray-300 text-lg leading-relaxed text-center mb-16">
+          <span className="text-[#39ff14] font-semibold">HashKrypt</span> is
+          your futuristic vault for securing any file — docs, images, videos, or
+          archives. Files are encrypted locally in your browser with{" "}
+          <span className="text-[#39ff14]">AES-256 </span> before leaving your
+          device. You can <span className="text-[#39ff14]">download</span> them
+          offline or <span className="text-[#39ff14]">share securely</span> via
+          HashKrypt. Recipients decrypt instantly, making collaboration private
+          and seamless.
+        </p>
 
-              {/* neon glow outline */}
-              <div
-                aria-hidden
-                className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-                style={{ boxShadow: "0 0 25px #39ff14" }}
-              />
-            </motion.article>
-
-            {/* Encrypt */}
-            <motion.article
-              variants={cardVariant}
-              className="relative group bg-gray-900 rounded-2xl p-10 flex flex-col items-center text-center shadow-lg min-h-[300px] transform-gpu"
-              whileHover={{ translateY: -6, scale: 1.02 }}
-              transition={{ type: "spring", stiffness: 200, damping: 18 }}
-            >
-              <div className="mb-4">
-                <LockClosedIcon className="w-12 h-12 text-[#39ff14] mb-2" />
-              </div>
-              <h3 className="text-xl font-semibold mb-3">Encrypt</h3>
-              <p className="text-gray-400">
-                Your file is encrypted locally in your browser with AES-256. We
-                never see your plaintext.
-              </p>
-
-              {/* neon glow outline */}
-              <div
-                aria-hidden
-                className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-                style={{ boxShadow: "0 0 25px #39ff14" }}
-              />
-            </motion.article>
-
-            {/* Share */}
-            <motion.article
-              variants={cardVariant}
-              className="relative group bg-gray-900 rounded-2xl p-10 flex flex-col items-center text-center shadow-lg min-h-[300px] transform-gpu"
-              whileHover={{ translateY: -6, scale: 1.02 }}
-              transition={{ type: "spring", stiffness: 200, damping: 18 }}
-            >
-              <div className="mb-4">
-                <ShareIcon className="w-12 h-12 text-[#39ff14] mb-2" />
-              </div>
-              <h3 className="text-xl font-semibold mb-3">Share</h3>
-              <p className="text-gray-400">
-                Send securely to trusted recipients only. Keys are shared
-                end-to-end without server access.
-              </p>
-
-              {/* neon glow outline */}
-              <div
-                aria-hidden
-                className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-                style={{ boxShadow: "0 0 25px #39ff14" }}
-              />
-            </motion.article>
-          </motion.div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 max-w-6xl w-full">
+          <motion.article className="relative bg-gray-900/40 backdrop-blur-lg border border-gray-800 rounded-2xl p-10 text-center shadow-lg group overflow-hidden">
+            <CloudArrowUpIcon className="w-14 h-14 text-[#39ff14] mx-auto mb-4" />
+            <h3 className="text-2xl font-semibold mb-3 text-white">Upload</h3>
+            <p className="text-gray-400">
+              Select any file type and prepare it for secure transfer with one
+              click.
+            </p>
+          </motion.article>
+          <motion.article className="relative bg-gray-900/40 backdrop-blur-lg border border-gray-800 rounded-2xl p-10 text-center shadow-lg group overflow-hidden">
+            <LockClosedIcon className="w-14 h-14 text-[#39ff14] mx-auto mb-4" />
+            <h3 className="text-2xl font-semibold mb-3 text-white">Encrypt</h3>
+            <p className="text-gray-400">
+              AES-256 encryption happens instantly in your browser. No plaintext
+              leaves your device.
+            </p>
+          </motion.article>
+          <motion.article className="relative bg-gray-900/40 backdrop-blur-lg border border-gray-800 rounded-2xl p-10 text-center shadow-lg group overflow-hidden">
+            <ShareIcon className="w-14 h-14 text-[#39ff14] mx-auto mb-4" />
+            <h3 className="text-2xl font-semibold mb-3 text-white">
+              Share & Decrypt
+            </h3>
+            <p className="text-gray-400">
+              Share securely via HashKrypt. Recipients decrypt instantly,
+              without server access.
+            </p>
+          </motion.article>
         </div>
-
-        {/* Additional spacing to avoid overlap with next section */}
-        <div className="mt-12" />
       </motion.section>
 
       {/* Trust Section */}
@@ -206,7 +160,7 @@ export default function Home() {
         className="min-h-screen flex flex-col md:flex-row items-center justify-center bg-[#0d0d0d] text-white px-8"
         initial={{ opacity: 0, y: 80 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.25 }}
+        viewport={{ once: false, amount: 0.25 }}
         transition={{ duration: 1 }}
       >
         <div className="flex-1 mb-12 md:mb-0">

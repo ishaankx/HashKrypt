@@ -56,7 +56,7 @@ export default function RootLayout({
           <header className="fixed top-0 left-0 w-full bg-black/70 backdrop-blur z-50 text-white shadow-sm">
             <div className="relative flex w-full items-center justify-between px-8 py-4">
               {/* Logo → always returns home */}
-              <Link href="/" className="flex items-center space-x-3">
+              <Link href="/" className="flex items-center space-x-1">
                 <Image
                   src="/HK-V2.png"
                   alt="HashKrypt Logo"
