@@ -1,3 +1,4 @@
+// layout.tsx
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -7,13 +8,14 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Poppins, Orbitron } from "next/font/google";
 import SmoothScroll from "@/components/SmoothScroll";
-import NavBar from "@/components/NavBar"; // 👈 client navbar with usePathname
+import NavBar from "@/components/NavBar"; // client navbar (desktop)
+import MobileNav from "@/components/MobileNav"; // NEW: mobile header
 import { Share_Tech_Mono } from "next/font/google";
 
 const matrix = Share_Tech_Mono({
   subsets: ["latin"],
   weight: ["400"],
-  variable: "--font-matrix", // 👈 matches globals.css
+  variable: "--font-matrix",
 });
 
 const poppins = Poppins({
@@ -54,9 +56,14 @@ export default function RootLayout({
         <SmoothScroll>
           {/* Header */}
           <header className="fixed top-0 left-0 w-full bg-black/70 backdrop-blur z-50 text-white shadow-sm">
-            <div className="relative flex w-full items-center justify-between px-8 py-4">
-              {/* Logo → always returns home */}
-              <Link href="/" className="flex items-center space-x-1">
+            <div className="relative flex w-full items-center justify-between px-4 md:px-8 py-4">
+              {/* Mobile header (hamburger + center logo + mobile get-started) */}
+              <div className="w-full md:hidden">
+                <MobileNav />
+              </div>
+
+              {/* Desktop Logo (left) - hidden on mobile */}
+              <Link href="/" className="hidden md:flex items-center space-x-1">
                 <Image
                   src="/HK-V2.png"
                   alt="HashKrypt Logo"
@@ -67,13 +74,16 @@ export default function RootLayout({
                 <h1 className={`${orbitron.className} text-2xl`}>HashKrypt</h1>
               </Link>
 
-              {/* Centered NavBar */}
-              <div className="absolute left-1/2 transform -translate-x-1/2">
+              {/* Centered NavBar (desktop only) */}
+              <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2">
                 <NavBar />
               </div>
 
-              {/* Get Started Button */}
-              <Button variant="rect" className={`${poppins.className} ml-auto`}>
+              {/* Get Started Button (desktop only) */}
+              <Button
+                variant="rect"
+                className={`${poppins.className} ml-auto hidden md:inline-flex`}
+              >
                 Get Started
               </Button>
             </div>

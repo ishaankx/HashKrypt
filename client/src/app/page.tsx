@@ -101,7 +101,13 @@ export default function Home() {
         className="relative min-h-screen flex flex-col items-center justify-center bg-black text-white px-10 py-20 overflow-hidden"
         initial={{ opacity: 0, y: 60 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: false, amount: 0.4 }}
+        viewport={{
+          once: false,
+          amount:
+            typeof window !== "undefined" && window.innerWidth < 768
+              ? 0.1
+              : 0.4,
+        }}
         transition={{ duration: 0.9 }}
       >
         {/* Glowing backdrop */}

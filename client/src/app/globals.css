@@ -208,3 +208,23 @@ html {
 .glitch-hover span {
   animation: glitch-flicker 0.15s infinite;
 }
+
+.mobile-popover {
+  transition: transform 0.18s ease, opacity 0.18s ease;
+  transform-origin: top left;
+  will-change: transform, opacity;
+}
+
+/* Subtle backdrop-blur for the overlay */
+.mobile-popover-backdrop {
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(6px);
+}
+
+/* Slightly tighter header padding on very small screens */
+@media (max-width: 420px) {
+  header .px-4 {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+}
