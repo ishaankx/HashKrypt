@@ -21,6 +21,7 @@ interface TypingGlitchWordsProps {
   glitchDuration?: number;
   glitchInterval?: number;
   pauseBetweenWords?: number;
+  glitchChance?: number; // 👈 probability of a character glitching
 }
 
 export default function TypingGlitchWords({
@@ -30,9 +31,10 @@ export default function TypingGlitchWords({
   glitchDuration = 800,
   glitchInterval = 60,
   pauseBetweenWords = 600,
+  glitchChance = 0.3, // default 30%
 }: TypingGlitchWordsProps) {
-  const [typedIndex, setTypedIndex] = useState(0); // how many characters typed
-  const [glitchIndex, setGlitchIndex] = useState<number | null>(null); // which word is glitching
+  const [typedIndex, setTypedIndex] = useState(0);
+  const [glitchIndex, setGlitchIndex] = useState<number | null>(null);
   const [glitchChars, setGlitchChars] = useState<string[]>([]);
   const [cursorBlink, setCursorBlink] = useState(true);
   const [fadePhase, setFadePhase] = useState<"normal" | "fade-out" | "fade-in">(
@@ -45,12 +47,12 @@ export default function TypingGlitchWords({
     return () => clearInterval(t);
   }, []);
 
+  // typing + glitching logic
   useEffect(() => {
     let cancelled = false;
 
     const run = async () => {
       try {
-        // reset
         setTypedIndex(0);
         setFadePhase("fade-in");
         await sleep(200);
@@ -64,7 +66,7 @@ export default function TypingGlitchWords({
 
         await sleep(pauseAfterTyped);
 
-        // split into words once typed is complete
+        // split into words
         const words = text.split(" ");
 
         // GLITCH EACH WORD
@@ -77,11 +79,13 @@ export default function TypingGlitchWords({
 
           while (Date.now() - start < glitchDuration) {
             if (cancelled) return;
-            const blackIdx = Math.floor(Math.random() * original.length);
-            const chars = Array.from(original).map(() => randChar());
-            setGlitchChars(
-              chars.map((ch, i) => (i === blackIdx ? ch.toUpperCase() : ch))
+
+            // glitch only some chars
+            const chars = Array.from(original).map((ch) =>
+              Math.random() < glitchChance ? randChar() : ch
             );
+
+            setGlitchChars(chars);
             await sleep(glitchInterval);
           }
 
@@ -91,7 +95,7 @@ export default function TypingGlitchWords({
           await sleep(pauseBetweenWords);
         }
 
-        // FADE OUT, RESTART
+        // fade out + restart
         setFadePhase("fade-out");
         await sleep(400);
         setTypedIndex(0);
@@ -114,10 +118,11 @@ export default function TypingGlitchWords({
     glitchDuration,
     glitchInterval,
     pauseBetweenWords,
+    glitchChance, // ✅ stable dependency array
   ]);
 
   const fullTyped = text.slice(0, typedIndex);
-  const splitWords = fullTyped.split(/(\s+)/); // keeps spaces as tokens
+  const splitWords = fullTyped.split(/(\s+)/);
 
   return (
     <span
@@ -140,14 +145,18 @@ export default function TypingGlitchWords({
           text.split(" ")[glitchIndex] === word.trim()
         ) {
           return (
-            <span key={`glitch-${idx}`} className="font-matrix inline-block">
+            <span key={`glitch-${idx}`} className="inline-block">
               {glitchChars.map((ch, i) => {
+                const isGlitched = ch !== word.trim()[i]; // glitched if replaced with randChar
                 const isBlack =
                   i === Math.floor(Math.random() * glitchChars.length);
+
                 return (
                   <span
                     key={i}
-                    className={isBlack ? "text-black" : "text-[#39ff14]"}
+                    className={`${isGlitched ? "font-mono" : "font-matrix"} ${
+                      isBlack ? "text-black" : "text-[#39ff14]"
+                    }`}
                   >
                     {ch}
                   </span>

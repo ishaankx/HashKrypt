@@ -1,37 +1,34 @@
+// layout.tsx
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import * as NavigationMenu from "@radix-ui/react-navigation-menu";
 import Image from "next/image";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { Poppins, Orbitron } from "next/font/google";
+import SmoothScroll from "@/components/SmoothScroll";
+import NavBar from "@/components/NavBar"; // client navbar (desktop)
+import MobileNav from "@/components/MobileNav"; // NEW: mobile header
 import { Share_Tech_Mono } from "next/font/google";
-import { Orbitron } from "next/font/google";
-import { Poppins } from "next/font/google";
+
+const matrix = Share_Tech_Mono({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-matrix",
+});
 
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["400", "600"],
   variable: "--font-poppins",
 });
-
 const orbitron = Orbitron({
   subsets: ["latin"],
-  weight: ["400", "700"], // choose weights you want
+  weight: ["400", "700"],
   variable: "--font-orbitron",
 });
-
-const matrixFont = Share_Tech_Mono({
-  weight: "400",
-  subsets: ["latin"],
-  variable: "--font-matrix",
-});
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
@@ -50,77 +47,54 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${matrixFont.variable} ${orbitron.variable} ${poppins.variable}`}
+      className={`${geistSans.variable} ${geistMono.variable} ${orbitron.variable} ${poppins.variable} ${matrix.variable}`}
     >
-      <body className="flex min-h-screen flex-col antialiased bg-gradient-to-b from-black">
-        <header className="w-full bg-gray-250 text-black shadow-sm">
-          <div className="flex w-full items-center justify-between px-8 py-4">
-            {/* Logo + Brand */}
-            <Link href="/" className="flex items-center space-x-3">
-              <Image
-                src="/HK-Logo-V2.png" // put this file in client/public
-                alt="HashKrypt Logo"
-                width={40}
-                height={40}
-                priority
-              />
-              <h1 className={`${orbitron.className} text-2xl text-white`}>
-                HashKrypt
-              </h1>
-            </Link>
+      <body className="flex min-h-screen flex-col antialiased bg-black text-white">
+        {/* Background Parallax */}
+        <div className="parallax-bg" id="parallax-bg" />
 
-            {/* Navigation */}
-            <NavigationMenu.Root>
-              <NavigationMenu.List
-                className={`flex items-center space-x-8 ${poppins.className}`}
+        <SmoothScroll>
+          {/* Header */}
+          <header className="fixed top-0 left-0 w-full bg-black/70 backdrop-blur z-50 text-white shadow-sm">
+            <div className="relative flex w-full items-center justify-between px-4 md:px-8 py-4">
+              {/* Mobile header (hamburger + center logo + mobile get-started) */}
+              <div className="w-full md:hidden">
+                <MobileNav />
+              </div>
+
+              {/* Desktop Logo (left) - hidden on mobile */}
+              <Link href="/" className="hidden md:flex items-center space-x-1">
+                <Image
+                  src="/HK-V2.png"
+                  alt="HashKrypt Logo"
+                  width={40}
+                  height={40}
+                  priority
+                />
+                <h1 className={`${orbitron.className} text-2xl`}>HashKrypt</h1>
+              </Link>
+
+              {/* Centered NavBar (desktop only) */}
+              <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2">
+                <NavBar />
+              </div>
+
+              {/* Get Started Button (desktop only) */}
+              <Button
+                variant="rect"
+                className={`${poppins.className} ml-auto hidden md:inline-flex`}
               >
-                <NavigationMenu.Item>
-                  <NavigationMenu.Link
-                    href="#features"
-                    className="text-white hover:text-brand-dark"
-                  >
-                    Features
-                  </NavigationMenu.Link>
-                </NavigationMenu.Item>
-                <NavigationMenu.Item>
-                  <NavigationMenu.Link
-                    href="#features"
-                    className="text-white hover:text-brand-dark"
-                  >
-                    Pricing
-                  </NavigationMenu.Link>
-                </NavigationMenu.Item>
-                <NavigationMenu.Item>
-                  <NavigationMenu.Link
-                    href="#about"
-                    className="text-white hover:text-brand-dark"
-                  >
-                    About
-                  </NavigationMenu.Link>
-                </NavigationMenu.Item>
-                <NavigationMenu.Item>
-                  <NavigationMenu.Link
-                    href="#contact"
-                    className="text-white hover:text-brand-dark"
-                  >
-                    Contact
-                  </NavigationMenu.Link>
-                </NavigationMenu.Item>
-              </NavigationMenu.List>
-            </NavigationMenu.Root>
+                Get Started
+              </Button>
+            </div>
+          </header>
 
-            <Button
-              variant="rect"
-              className={`ml-6 flex items-center space-x-8 ${poppins.className}`}
-            >
-              Get Started
-            </Button>
-          </div>
-        </header>
+          {/* Main content */}
+          <main className="flex-1 pt-24">{children}</main>
 
-        <main className="flex-1">{children}</main>
-
-        <Footer />
+          {/* Footer */}
+          <Footer />
+        </SmoothScroll>
       </body>
     </html>
   );
