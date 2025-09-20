@@ -342,7 +342,7 @@ export default function HowItWorksPage() {
 
       {/* Vault deep dive */}
       <section id="vault" className="px-6 mt-12 mb-20">
-        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-center justify-center">
           {/* Info panel */}
           <motion.div
             className="relative bg-gray-900/30 backdrop-blur-md border border-gray-800 rounded-2xl p-8 shadow-md"
@@ -353,16 +353,20 @@ export default function HowItWorksPage() {
             <h3 className="text-2xl font-semibold text-white mb-3">
               Key Vault — how it protects your keys
             </h3>
-            <p className="text-gray-300 mb-4">The Key Vault stores:</p>
-            <ul className="list-disc list-inside text-gray-300">
+            <p className="text-gray-300 mb-4 text-center">
+              The Key Vault stores:
+            </p>
+            {/* Centered but left-aligned bullets */}
+            <ul className="list-disc text-gray-300 text-left mx-auto w-fit pl-5">
               <li>Your personal encryption keys</li>
               <li>Keys shared with you</li>
             </ul>
-            <p className="text-gray-300 mt-4">
+            <p className="text-gray-300 mt-4 text-center">
               Encrypted client-side with your <strong>Personal Key</strong>.
               Decrypted in-memory only.
             </p>
-            <div className="mt-6 flex gap-3">
+            {/* Buttons centered */}
+            <div className="mt-6 flex gap-3 justify-center">
               <Button variant="rect" size="default" asChild>
                 <a href="#details">Explore Steps</a>
               </Button>
