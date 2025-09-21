@@ -11,9 +11,12 @@ import {
   ShieldCheckIcon,
   CheckBadgeIcon,
 } from "@heroicons/react/24/outline";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export default function Home() {
   const containerRef = useRef<HTMLElement | null>(null);
+  const pathname = usePathname(); // ✅ add this here
 
   // track scroll progress relative to the whole page
   const { scrollYProgress } = useScroll({
@@ -88,8 +91,15 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1, duration: 0.8 }}
           >
-            <Button variant="glitch" size="lg">
-              Start Encrypting
+            <Button
+              variant="glitch"
+              size="lg"
+              asChild
+              className={`w-full sm:w-auto ${
+                pathname === "/" ? "bg-[#39ff14] text-black" : ""
+              }`}
+            >
+              <Link href="/signup">Start Encrypting</Link>
             </Button>
           </motion.div>
         </div>
