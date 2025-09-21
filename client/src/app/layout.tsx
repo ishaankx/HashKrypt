@@ -11,6 +11,8 @@ import SmoothScroll from "@/components/SmoothScroll";
 import NavBar from "@/components/NavBar"; // client navbar (desktop)
 import MobileNav from "@/components/MobileNav"; // NEW: mobile header
 import { Share_Tech_Mono } from "next/font/google";
+import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
 
 const matrix = Share_Tech_Mono({
   subsets: ["latin"],
@@ -83,8 +85,9 @@ export default function RootLayout({
               <Button
                 variant="rect"
                 className={`${poppins.className} ml-auto hidden md:inline-flex`}
+                asChild
               >
-                Get Started
+                <Link href="/signup">Get Started</Link>
               </Button>
             </div>
           </header>
