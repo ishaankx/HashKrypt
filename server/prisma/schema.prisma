@@ -1,0 +1,72 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id                       String   @id @default(uuid())
+  email                    String   @unique
+  fullName                 String?
+  phone                    String?
+  country                  String?
+  passwordHash             String
+  displayName              String?
+  pubKey                   String   // base64 public key
+  encryptedPrivKeyBlob     Json     // { salt, nonce, ciphertext, kdf }
+  createdAt                DateTime @default(now())
+  updatedAt                DateTime @updatedAt
+
+  files                    File[]   @relation("ownerFiles")
+  fileKeys                 FileKey[]
+  refreshTokens            RefreshToken[]
+}
+
+model File {
+  id            String   @id @default(uuid())
+  ownerId       String
+  owner         User     @relation(fields: [ownerId], references: [id], name: "ownerFiles")
+  s3Key         String
+  filename      String
+  size          Int
+  mimeType      String
+  iv            String?  // base64 iv used for AES-GCM
+  tag           String?  // base64 tag if separate
+  createdAt     DateTime @default(now())
+  metadata      Json?
+  fileKeys      FileKey[]
+}
+
+model FileKey {
+  id           String   @id @default(uuid())
+  fileId       String
+  file         File     @relation(fields: [fileId], references: [id])
+  recipientId  String?  // null => owner-wrapped key
+  recipient    User?    @relation(fields: [recipientId], references: [id])
+  wrappedKey   String   // base64 sealed/wrapped DEK
+  algorithm    String
+  createdAt    DateTime @default(now())
+}
+
+model RefreshToken {
+  id         String   @id @default(uuid())
+  userId     String
+  tokenHash  String   // hashed token
+  createdAt  DateTime @default(now())
+  expiresAt  DateTime
+  revoked    Boolean  @default(false)
+
+  user       User     @relation(fields: [userId], references: [id])
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  userId    String?
+  action    String
+  detail    String?
+  ip        String?
+  createdAt DateTime @default(now())
+}
