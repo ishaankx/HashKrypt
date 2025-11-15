@@ -62,6 +62,8 @@ export default function MobileNav() {
 
   return (
     <div className="flex items-center justify-between w-full md:hidden">
+      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-transparent via-[#0a0a0a] to-black opacity-90" />
+      <div className="absolute top-32 left-1/2 -translate-x-1/2 w-[30vw] h-[30vw] bg-[#39ff14]/20 rounded-full blur-3xl opacity-55" />
       {/* Hamburger - top-left */}
       <button
         aria-label={open ? "Close menu" : "Open menu"}

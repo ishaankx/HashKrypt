@@ -11,12 +11,51 @@ import {
   ShieldCheckIcon,
   CheckBadgeIcon,
 } from "@heroicons/react/24/outline";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const containerRef = useRef<HTMLElement | null>(null);
-  const pathname = usePathname(); // ✅ add this here
+  const router = useRouter();
+
+  // inside your Home() component (keep existing imports + "use client")
+  const [ctaLoading, setCtaLoading] = useState(false);
+  const [ctaAnim, setCtaAnim] = useState(false);
+
+  // Prefetch signup route on mount for faster navigation
+  useEffect(() => {
+    // router.prefetch exists in next/navigation; safe to call inside client component
+    try {
+      router.prefetch("/signup");
+    } catch (e) {
+      // ignore if not available or in dev
+    }
+  }, [router]);
+
+  async function handleStart() {
+    if (ctaLoading) return; // guard
+    setCtaLoading(true);
+
+    try {
+      // optional analytics (fire-and-forget)
+      try {
+        // analytics.track("clicked_start", { source: "marketing_hero" });
+      } catch (err) {
+        // non-blocking: ignore analytics errors
+      }
+
+      // micro-animation: toggle a class for 180-220ms to give a tactile response
+      setCtaAnim(true);
+      await new Promise((r) => setTimeout(r, 200));
+
+      // navigate to signup
+      router.push("/signup");
+    } finally {
+      // small safety fallback, though router.push will unmount this component
+      setCtaLoading(false);
+      setCtaAnim(false);
+    }
+  }
 
   // track scroll progress relative to the whole page
   const { scrollYProgress } = useScroll({
@@ -42,6 +81,55 @@ export default function Home() {
         className="relative min-h-screen flex flex-col items-center justify-center text-center overflow-hidden"
         style={{ scale, opacity }} // zooms out on scroll
       >
+        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-transparent via-[#0a0a0a] to-black opacity-90" />
+        <div className="absolute top-32 left-1/2 -translate-x-1/2 w-[35vw] h-[25vw] bg-[#39ff14]/20 rounded-full blur-3xl opacity-55" />
+        {/* --- HERO LAYER: neon glows (placed BEFORE content) --- */}
+        {/* Large soft radial (main neon spot) */}
+        <motion.div
+          aria-hidden
+          initial={{ opacity: 0, scale: 0.98 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1.1, ease: "easeOut" }}
+          className="absolute inset-0 flex items-center justify-center pointer-events-none z-0"
+          style={{ willChange: "transform, opacity" }}
+        >
+          <div
+            className="w-[60vw] h-[60vw] max-w-[1200px] max-h-[1200px] rounded-full filter blur-3xl pointer-events-none"
+            style={{
+              background:
+                "radial-gradient(circle at 50% 40%, rgba(57,255,20,0.10) 0%, rgba(57,255,20,0.05) 6%, rgba(0,0,0,0.6) 40%, rgba(0,0,0,1) 100%)",
+              mixBlendMode: "screen",
+            }}
+          />
+        </motion.div>
+
+        {/* Secondary accent glows (optional; add depth) */}
+        <motion.div
+          aria-hidden
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 0.8 }}
+          transition={{ delay: 0.3, duration: 1.2 }}
+          className="absolute top-24 left-1/4 w-[28vw] h-[28vw] max-w-[520px] max-h-[520px] rounded-full blur-2xl pointer-events-none z-0"
+          style={{
+            background:
+              "radial-gradient(circle, rgba(57,255,20,0.05), transparent 60%)",
+            mixBlendMode: "screen",
+          }}
+        />
+        <motion.div
+          aria-hidden
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 0.6 }}
+          transition={{ delay: 0.45, duration: 1.3 }}
+          className="absolute bottom-12 right-1/5 w-[20vw] h-[20vw] max-w-[420px] max-h-[420px] rounded-full blur-2xl pointer-events-none z-0"
+          style={{
+            background:
+              "radial-gradient(circle, rgba(0,180,120,0.03), transparent 60%)",
+            mixBlendMode: "screen",
+          }}
+        />
+
+        {/* --- HERO CONTENT: keep as-is but ensure it has higher z-index --- */}
         {/* Terminal top-left */}
         <div className="absolute top-1 left-6 flex items-center font-mono text-lg text-[#39ff14] z-10">
           <span className="font-bold">User@HashKrypt:~$</span>
@@ -58,7 +146,7 @@ export default function Home() {
         </div>
 
         {/* Hero text block with load-in animation */}
-        <div className="relative flex flex-col items-center -mt-28">
+        <div className="relative z-10 flex flex-col items-center -mt-28">
           <motion.h1
             className="text-5xl sm:text-7xl font-extrabold"
             initial={{ opacity: 0, y: 40 }}
@@ -94,12 +182,13 @@ export default function Home() {
             <Button
               variant="glitch"
               size="lg"
-              asChild
-              className={`w-full sm:w-auto ${
-                pathname === "/" ? "bg-[#39ff14] text-black" : ""
-              }`}
+              onClick={handleStart}
+              className={`w-full sm:w-auto transform transition-transform duration-150 ${
+                ctaAnim ? "scale-95" : "scale-100"
+              } ${ctaLoading ? "opacity-80 pointer-events-none" : ""}`}
+              aria-label="Start Encrypting — create an account"
             >
-              <Link href="/signup">Start Encrypting</Link>
+              {ctaLoading ? "Start Encrypting" : "Start Encrypting"}
             </Button>
           </motion.div>
         </div>

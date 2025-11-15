@@ -218,6 +218,9 @@ export default function HowItWorksPage() {
 
   return (
     <main className="relative min-h-screen flex flex-col items-center justify-center text-center overflow-hidden">
+      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-transparent via-[#0a0a0a] to-black opacity-90" />
+      <div className="absolute top-32 left-1/2 -translate-x-1/2 w-[35vw] h-[25vw] bg-[#39ff14]/20 rounded-full blur-3xl opacity-55" />
+
       {/* Hero */}
       {/* Hero */}
       <motion.section
