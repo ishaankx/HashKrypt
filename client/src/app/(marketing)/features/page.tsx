@@ -5,8 +5,6 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import { motion, easeOut, Variants } from "framer-motion";
 import {
-  Cog6ToothIcon,
-  ShieldCheckIcon,
   LockClosedIcon,
   ArrowDownTrayIcon,
   BoltIcon,
@@ -199,6 +197,8 @@ export default function FeaturesPage() {
 
   return (
     <main className="relative min-h-screen flex flex-col items-center justify-center text-center overflow-hidden">
+      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-transparent via-[#0a0a0a] to-black opacity-90" />
+      <div className="absolute top-32 left-1/2 -translate-x-1/2 w-[35vw] h-[25vw] bg-[#39ff14]/20 rounded-full blur-3xl opacity-55" />
       {/* HERO */}
       <section className="relative flex items-center justify-center text-center px-6 py-14 md:py-24">
         <div className="w-full max-w-4xl">
